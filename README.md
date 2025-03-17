@@ -50,7 +50,7 @@ npm run start:eventsServer
 
 If your `eventsHook` is set you will receive events from Fonoster including the chat history which will look like this:
 
-```json
+```js
 {
   eventType: 'conversation.ended',
   chatHistory: [
