@@ -1,0 +1,105 @@
+name: "Awesome Autopilot"
+type: "AUTOPILOT"
+speechToText:
+  productRef: "stt.deepgram"
+  config:
+    model: "nova-2-phonecall"
+    languageCode: "en-US"
+textToSpeech:
+  productRef: "tts.elevenlabs"
+  config:
+    voice: "6gviCf27bOZ2Wml5iZZv"
+intelligence:
+  productRef: "llm.groq"
+  config:
+    conversationSettings:
+      firstMessage: "Hello, I'm the Awesome Autopilot, how can I help you today?"
+      systemPrompt: |
+        ## Role
+        You are an awesome assistant that can talk about anything. You always ask for the user's name before proceeding with the conversation.
+
+        ## Example Interaction
+        Assistant: Hello, I'm the Awesome Autopilot, how can I help you today?
+        User: I want to learn about the meaning of life.
+
+        Assistant: Ok, but first, what's your name?
+        User: My name is John Doe. 
+
+        Assistant: Hello John Doe. Life is a journey of love, laughter, and learning. (And use the `saveUserInfo` tool to save the user's name)
+        User: That's a great answer! Thank you!
+
+        Assistant: You're welcome! Is there anything else I can help you with?
+        User: No, that's all.
+
+        Assistant: Thank you for your time. Have a great day! (And use the `hangup` tool to end the call)
+
+      goodbyeMessage: "Thank you so much, bye!"
+      systemErrorMessage: "I'm sorry, I didn't understand that. Can you please repeat it?"
+      vad:
+        activationThreshold: 0.4
+        deactivationThreshold: 0.25
+        debounceFrames: 4
+      idleOptions:
+        message: "Are you still there?"
+      transferOptions:
+        phoneNumber: "+33666666666"
+        message: "I will transfer you to a live agent to help you with your request."
+        timeout: 30
+    languageModel:
+      provider: "groq"
+      model: "llama-3.1-70b-versatile"
+      maxTokens: 240
+      temperature: 0.4
+      apiKey: "REDACTED"
+      tools: 
+        - name: "saveUserInfo"
+          description: "Tool to save the user's name."
+          parameters:
+            type: "object"
+            properties:
+              name:
+                type: "string"
+            required:
+              - name
+          operation:
+            method: "post"
+            url: "https://82e4-47-132-130-31.ngrok-free.app/events"
+            waitForResponse: false
+            headers:
+              x-api-key: "REDACTED"
+    testCases:
+      evalsLanguageModel:
+        # Note: Only OpenAI is supported for evals
+        provider: "openai"
+        model: "gpt-4o"
+        apiKey: "REDACTED"
+      scenarios:
+        - ref: "test-case-1"
+          description: "Reporte de queja"
+          telephonyContext:
+            callDirection: "FROM_PSTN"
+            ingressNumber: "+11111111111"
+            callerNumber: "+22222222222"
+          conversation:
+            - userInput: "I want to learn about the meaning of life."
+              expected: 
+                text:
+                  type: "similar"
+                  response: "Ok, but first, what's your name?"
+            - userInput: "My name is John Doe."
+              expected:
+                text:
+                  type: "similar"
+                  response: "Great to meet you John Doe. Life is a journey of love, laughter, and learning. Anything else I can help you with?"
+                tools:
+                  - tool: "saveUserInfo"
+                    parameters:
+                      name: "John Doe"
+            - userInput: "No, that's all."
+              expected:
+                text:
+                  type: "similar"
+                  response: "Thank you for your time. Have a great day!"
+                tools:
+                  - tool: "hangup"
+                    parameters: {}

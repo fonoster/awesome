@@ -1,0 +1,40 @@
+{
+  "name": "awesome",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "applyAppConfig": "ts-node src/applyAppConfig.ts",
+    "createCall": "ts-node src/createCall.ts",
+    "start:eventsServer": "ts-node-dev --respawn --transpile-only src/eventsServer.ts",
+    "build": "tsc",
+    "test": "mocha -r ts-node/register 'src/**/*.test.ts'",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"src/**/*.{js,ts,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{js,ts,json,md}\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@fonoster/sdk": "^0.9.37",
+    "dotenv": "^16.0.3",
+    "express": "^4.21.2",
+    "js-yaml": "^4.1.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/js-yaml": "^4.0.9",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.24",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "mocha": "^10.3.0",
+    "prettier": "^3.2.5",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  }
+}
