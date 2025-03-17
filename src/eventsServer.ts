@@ -1,6 +1,6 @@
 import express from "express";
 const app = express();
-const port = 4000;
+const port = 3000;
 
 app.use(express.json());
 
@@ -10,15 +10,6 @@ app.post("/events", (req, res) => {
 
   res.json({
     response: "event received"
-  });
-});
-
-app.get("/test", (req, res) => {
-  console.log("Headers:", req.headers);
-  console.log("Body:", req.body);
-
-  res.json({
-    result: "we booked an appointment for your for Friday next week"
   });
 });
 
