@@ -11,6 +11,7 @@ To run the project, you need to have the following environment variables set:
 - `AWESOME_API_SECRET`
 - `AWESOME_FROM_NUMBER`
 - `AWESOME_TO_NUMBER`
+- `AWESOME_APP_REF`
 
 Please copy the `.env.example` file to `.env` and set the environment variables and update the variables accordingly.
 
@@ -20,15 +21,13 @@ Then install the dependencies by running the following command:
 npm install
 ```
 
-## Apply changes to the App at Fonoster
+## Create the Application at Fonoster
 
-To apply changes to the App at Fonoster, you can use the following command:
+To create the Application at Fonoster, you can use the following command:
 
 ```bash
-npm run applyAppConfig
+fonoster applications:create --from-file appConfig.yaml # or fonoster applications:update
 ```
-
-This will look at the `appConfig.yaml` file and apply the changes to the App at Fonoster.
 
 ## Create a call
 
@@ -77,8 +76,6 @@ ngrok http 3000
 
 This will expose the events server to the internet and you can use the URL returned by Ngrok to test the events server.
 
-
-
 ## Run the test cases
 
 Firt, make sure to set the `apiKey` for the language model and the evals provider in the `appConfig.yaml` file.
@@ -86,7 +83,7 @@ Firt, make sure to set the `apiKey` for the language model and the evals provide
 Then, you use the following command to run the test cases:
 
 ```bash
-fonoster utils:autopilotTestsCases -f appConfig.yaml
+fonoster autopilot:testCases -f appConfig.yaml
 ```
 
 Your output should be similar to the following:
