@@ -3,14 +3,14 @@ type: "AUTOPILOT"
 speechToText:
   productRef: "stt.deepgram"
   config:
-    model: "nova-2-phonecall"
+    model: "nova-3"
     languageCode: "en-US"
 textToSpeech:
   productRef: "tts.elevenlabs"
   config:
     voice: "6gviCf27bOZ2Wml5iZZv"
 intelligence:
-  productRef: "llm.groq"
+  productRef: "llm.google"
   config:
     conversationSettings:
       firstMessage: "Hello, I'm the Awesome Autopilot, how can I help you today?"
@@ -45,15 +45,13 @@ intelligence:
       idleOptions:
         message: "Are you still there?"
       transferOptions:
-        phoneNumber: "+33666666666"
+        phoneNumber: "+17853178070"
         message: "I will transfer you to a live agent to help you with your request."
-        timeout: 30
     languageModel:
-      provider: "groq"
-      model: "llama-3.3-70b-versatile"
+      provider: "google"
+      model: "gemini-2.0-flash-lite"
       maxTokens: 240
       temperature: 0.4
-      apiKey: "REDACTED"
     eventsHook:
       # TODO: Replace with your own URL
       url: "https://ac86-47-132-130-31.ngrok-free.app/events"
@@ -61,38 +59,3 @@ intelligence:
         Content-Type: "application/json"
         Authorization: "Basic REDACTED"
       events: ["all"]
-
-## TEST CASES
-
-    testCases:
-      evalsLanguageModel:
-        # Note: Only OpenAI is supported for evals
-        provider: "openai"
-        model: "gpt-4o"
-        apiKey: "REDACTED"
-      scenarios:
-        - ref: "test-case-1"
-          description: "Reporte de queja"
-          telephonyContext:
-            callDirection: "FROM_PSTN"
-            ingressNumber: "+11111111111"
-            callerNumber: "+22222222222"
-          conversation:
-            - userInput: "I want to learn about the meaning of life."
-              expected: 
-                text:
-                  type: "similar"
-                  response: "Ok, but first, what's your name?"
-            - userInput: "My name is John Doe."
-              expected:
-                text:
-                  type: "similar"
-                  response: "Great to meet you John Doe. Life is a journey of love, laughter, and learning. Anything else I can help you with?"
-            - userInput: "No, that's all."
-              expected:
-                text:
-                  type: "similar"
-                  response: "Thank you for your time. Have a great day!"
-                tools:
-                  - tool: "hangup"
-                    parameters: {}
